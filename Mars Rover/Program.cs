@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Mars_Rover
 {
@@ -6,51 +7,23 @@ namespace Mars_Rover
     {
         private static Rover rover;
         private static bool exitApp = false;
+        private static string movements = null;
 
         static void Main(string[] args)
         {
             while (!exitApp)
             {
-                if(rover == null)
-                {
-                    Console.WriteLine("Please enter the upper right coordinates in the format X Y");
-                    var initCoordinates = Console.ReadLine().Split(" ");
-
-                    if (initCoordinates.Length != 2) {
-                        continue;
-                    }
-
-                    if (!int.TryParse(initCoordinates[0], out int x) ||
-                        !int.TryParse(initCoordinates[1], out int y)) {
-
-                        continue;
-                    }
-
-                    rover = new Rover(x, y);
+                while (rover == null) {
+                    rover = InitRover();
                 }
 
-                Console.WriteLine("Please enter your rovers intial position");
-                var intialPos = Console.ReadLine().Split(" ");
-
-                if(intialPos.Length != 3) {
+                if (!RoverPosition()) {
                     continue;
                 }
 
-                if(!int.TryParse(intialPos[0], out int rovX) || 
-                   !int.TryParse(intialPos[1], out int rovY) ||
-                   !char.TryParse(intialPos[2], out char dir)) {
-                    continue;
+                while (movements == null) {
+                    movements = RoverMovement();
                 }
-
-                if(!rover.DirList.Contains(char.ToUpperInvariant(dir))) {
-                    continue;
-                }
-
-                rover.InitialPosition(rovX, rovY, dir);
-
-                Console.WriteLine("Please enter your rovers movements");
-                var movements = Console.ReadLine();
-
 
                 var results = rover.Move(movements);
 
@@ -62,7 +35,62 @@ namespace Mars_Rover
                 if(quit.ToUpperInvariant() == "N") {
                     exitApp = true;
                 }
+
+                movements = null;
             }
+        }
+
+        private static Rover InitRover()
+        {
+            Console.WriteLine("Please enter the upper right coordinates in the format X Y");
+            var initCoordinates = Console.ReadLine().Split(" ");
+
+            if (initCoordinates.Length != 2) {
+                return null;
+            }
+
+            if (!int.TryParse(initCoordinates[0], out int x) ||
+                !int.TryParse(initCoordinates[1], out int y)) {
+
+                return null;
+            }
+
+            return new Rover(x, y);
+        }
+
+        private static bool RoverPosition()
+        {
+            Console.WriteLine("Please enter your rovers intial position");
+            var intialPos = Console.ReadLine().Split(" ");
+
+            if (intialPos.Length != 3) {
+                return false;
+            }
+
+            if (!int.TryParse(intialPos[0], out int rovX) ||
+               !int.TryParse(intialPos[1], out int rovY) ||
+               !char.TryParse(intialPos[2], out char dir)) {
+                return false;
+            }
+
+            if (!rover.DirArray.Contains(char.ToUpperInvariant(dir))) {
+                return false;
+            }
+
+            rover.InitialPosition(rovX, rovY, dir);
+            return true;
+        }
+
+        private static string RoverMovement()
+        {
+            Console.WriteLine("Please enter your rovers movements");
+            var movements = Console.ReadLine();
+
+            if (movements.ToUpperInvariant().IndexOfAny(rover.CmdArray) != 0) {
+                return null;
+            }
+
+            return movements;
         }
     }
 }

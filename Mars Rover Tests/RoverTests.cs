@@ -235,5 +235,24 @@ namespace Mars_Rover_Tests
             results.Item3.Should().Be('N');
         }
 
+        [Fact]
+        public void Move_CommandsScenario5_ShouldReturnCorrectResults()
+        {
+            // Arrange
+            var arrangement = new ArrangementBuilder()
+                .WithXPosition(3)
+                .WithYPosition(3)
+                .Build();
+
+            // Act 
+            arrangement.SUT.InitialPosition(1, 1, 'N');
+            var results = arrangement.SUT.Move("MMMMRMMMM");
+
+            // Assert
+            results.Item1.Should().Be(3);
+            results.Item2.Should().Be(3);
+            results.Item3.Should().Be('E');
+        }
+
     }
 }

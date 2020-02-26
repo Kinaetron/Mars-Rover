@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Mars_Rover
@@ -19,17 +18,17 @@ namespace Mars_Rover
         public int XHigherBounds { get; private set; }
         public int YHigherBounds { get; private set; }
 
-        public List<char> DirList { get; private set; }
+        public char[] DirArray { get; private set; }
 
-        public List<char> CmdList { get; private set; }
+        public char[] CmdArray { get; private set; }
 
         public Rover(int x, int y)
         {
             XHigherBounds = x > XLowerBounds ? x : throw new ArgumentOutOfRangeException(nameof(x));
             YHigherBounds = y > YLowerBounds ? x : throw new ArgumentOutOfRangeException(nameof(y));
 
-            DirList = new List<char> { 'N', 'E', 'S', 'W' };
-            CmdList = new List<char> { 'M', 'L', 'R' };
+            DirArray = new char[] { 'N', 'E', 'S', 'W' };
+            CmdArray = new char[] { 'M', 'L', 'R' };
         }
 
         public void InitialPosition(int x, int y, char dir)
@@ -42,7 +41,7 @@ namespace Mars_Rover
                 throw new ArgumentOutOfRangeException(nameof(y));
             }
 
-            Direction = DirList.Contains(char.ToUpperInvariant(dir)) ? char.ToUpperInvariant(dir) 
+            Direction = DirArray.Contains(char.ToUpperInvariant(dir)) ? char.ToUpperInvariant(dir) 
                     : throw new ArgumentException("Direction specified isn't valid.");
 
             xPos = x;
@@ -57,22 +56,25 @@ namespace Mars_Rover
 
             var commandList = Regex.Replace(commands, @"s", "").ToUpper().Where(c => char.IsLetter(c));
 
-            if (commandList.Any(c => !CmdList.Contains(c))) {
+            if (commandList.Any(c => !CmdArray.Contains(c))) {
                 throw new ArgumentException("Your command list has an invalid letter.");
             }
 
             foreach (var cmd in commandList)
             {
-                if (cmd == CmdList[0]) {
+                if (cmd == CmdArray[0]) {
                     MoveForward();
+                    continue;
                 }
 
-                if (cmd == CmdList[1]) {
+                if (cmd == CmdArray[1]) {
                     RotateLeft();
+                    continue;
                 }
 
-                if (cmd == CmdList[2]) {
+                if (cmd == CmdArray[2]) {
                     RotateRight();
+                    continue;
                 }
             }
 
@@ -84,19 +86,19 @@ namespace Mars_Rover
             switch (Direction)
             {
                 case 'N':
-                    Direction = DirList[3];
+                    Direction = DirArray[3];
                     break;
 
                 case 'E':
-                    Direction = DirList[0];
+                    Direction = DirArray[0];
                     break;
 
                 case 'S':
-                    Direction = DirList[1];
+                    Direction = DirArray[1];
                     break;
 
                 case 'W':
-                    Direction = DirList[2];
+                    Direction = DirArray[2];
                     break;
             }
         }
@@ -106,44 +108,44 @@ namespace Mars_Rover
             switch (Direction)
             {
                 case 'N':
-                    Direction = DirList[1];
+                    Direction = DirArray[1];
                     break;
 
                 case 'E':
-                    Direction = DirList[2];
+                    Direction = DirArray[2];
                     break;
 
                 case 'S':
-                    Direction = DirList[3];
+                    Direction = DirArray[3];
                     break;
 
                 case 'W':
-                    Direction = DirList[0];
+                    Direction = DirArray[0];
                     break;
             }
         }
 
         private void MoveForward()
         {
-            if (Direction == DirList[0] && yPos < YHigherBounds)
+            if (Direction == DirArray[0] && yPos < YHigherBounds)
             {
                 yPos++;
                 return;
             }
 
-            if (Direction == DirList[1] && xPos < XHigherBounds)
+            if (Direction == DirArray[1] && xPos < XHigherBounds)
             {
                 xPos++;
                 return;
             }
 
-            if (Direction == DirList[2] && yPos > YLowerBounds)
+            if (Direction == DirArray[2] && yPos > YLowerBounds)
             {
                 yPos--;
                 return;
             }
 
-            if (Direction == DirList[3] && xPos > XLowerBounds)
+            if (Direction == DirArray[3] && xPos > XLowerBounds)
             {
                 xPos--;
                 return;
