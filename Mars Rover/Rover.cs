@@ -62,19 +62,19 @@ namespace Mars_Rover
 
             foreach (var cmd in commandList)
             {
-                if (cmd == CmdArray[0]) {
-                    MoveForward();
-                    continue;
-                }
+                switch (cmd)
+                {
+                    case 'M':
+                        MoveForward();
+                        break;
 
-                if (cmd == CmdArray[1]) {
-                    RotateLeft();
-                    continue;
-                }
+                    case 'L':
+                        RotateLeft();
+                        break;
 
-                if (cmd == CmdArray[2]) {
-                    RotateRight();
-                    continue;
+                    case 'R':
+                        RotateRight();
+                        break;
                 }
             }
 

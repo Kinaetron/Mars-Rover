@@ -30,7 +30,7 @@ namespace Mars_Rover
                 Console.WriteLine("The results of the rover are {0} {1} {2}", results.Item1, results.Item2, results.Item3);
 
                 Console.WriteLine("Do you want to continue (Y / N)");
-                var quit = Console.ReadLine();
+                var quit = Console.ReadLine().Trim();
 
                 if(quit.ToUpperInvariant() == "N") {
                     exitApp = true;
@@ -43,7 +43,7 @@ namespace Mars_Rover
         private static Rover InitRover()
         {
             Console.WriteLine("Please enter the upper right coordinates in the format X Y");
-            var initCoordinates = Console.ReadLine().Split(" ");
+            var initCoordinates = Console.ReadLine().Trim().Split(" ");
 
             if (initCoordinates.Length != 2) {
                 return null;
@@ -61,7 +61,7 @@ namespace Mars_Rover
         private static bool RoverPosition()
         {
             Console.WriteLine("Please enter your rovers intial position");
-            var intialPos = Console.ReadLine().Split(" ");
+            var intialPos = Console.ReadLine().Trim().Split(" ");
 
             if (intialPos.Length != 3) {
                 return false;
@@ -84,7 +84,7 @@ namespace Mars_Rover
         private static string RoverMovement()
         {
             Console.WriteLine("Please enter your rovers movements");
-            var movements = Console.ReadLine();
+            var movements = Console.ReadLine().Trim();
 
             if (movements.ToUpperInvariant().IndexOfAny(rover.CmdArray) != 0) {
                 return null;
